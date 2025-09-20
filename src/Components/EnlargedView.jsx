@@ -12,7 +12,7 @@ export default function EnlargedView({
   const imageRef = useRef(null);
   const activeThumbRef = useRef(null);
 
-  // Update index when startIndex changes
+  // Update index when startIndex changes (sync)
   useEffect(() => setIndex(startIndex), [startIndex]);
 
   const prev = () => setIndex((i) => (i > 0 ? i - 1 : i));
@@ -26,10 +26,12 @@ export default function EnlargedView({
       if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
   }, []);
 
-  // Update parent selected index
+  // Update parent selected index (sync)
   useEffect(() => setSelectedIndex(index), [index]);
 
   const handleZoomClick = (e) => {
