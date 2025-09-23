@@ -29,7 +29,7 @@ export default function EnlargedView({ images, startIndex, onClose }) {
     if (!zoom.active) {
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setZoom({ active: true, x, y, scale: 2 });
+      setZoom({ active: true, x, y, scale: 2.2 });
     } else {
       setZoom({ ...zoom, active: false });
     }
