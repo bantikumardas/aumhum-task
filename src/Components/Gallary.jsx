@@ -24,10 +24,27 @@ function Gallary() {
           thumb: `https://picsum.photos/id/${img.id}/400/300`,
           large: `https://picsum.photos/id/${img.id}/1200/800`,
         }));
-        setImages(mapped);
+
+        setImages((images) => {
+          images.push(...mapped);
+          return [...images];
+        });
       })
       .finally(() => setLoading(false));
   }, [page, limit]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", (event) => {
+      console.log(window.innerHeight + window.scrollY);
+      console.log(document.body.offsetHeight, "height");
+      if (
+        document.body.offsetHeight - (window.innerHeight + window.scrollY) <
+        50
+      ) {
+        setPage((p) => p + 1);
+      }
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex flex-col">
@@ -44,69 +61,66 @@ function Gallary() {
       </header>
 
       {/* Main Section */}
-      {loading ? (
-        <Spinner></Spinner>
-      ) : (
-        <>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+
+      <>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Grid images={images} onImageClick={(i) => setSelectedIndex(i)} />
+        </motion.div>
+
+        {/* Pagination Controls */}
+        <motion.div
+          className="flex justify-center items-center gap-4 my-6 flex-wrap"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white shadow-lg disabled:bg-gray-300 transition"
           >
-            <Grid images={images} onImageClick={(i) => setSelectedIndex(i)} />
-          </motion.div>
+            Previous
+          </button>
 
-          {/* Pagination Controls */}
-          <motion.div
-            className="flex justify-center items-center gap-4 my-6 flex-wrap"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+          {/* Dropdown for selecting limit */}
+          <select
+            value={limit}
+            onChange={(e) => {
+              setLimit(Number(e.target.value));
+              setPage(1); // reset to page 1 when limit changes
+            }}
+            className="px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-400 text-gray-700"
           >
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white shadow-lg disabled:bg-gray-300 transition"
-            >
-              Previous
-            </button>
+            <option value={10}>10 per page</option>
+            <option value={20}>20 per page</option>
+            <option value={50}>50 per page</option>
+            <option value={100}>100 per page</option>
+          </select>
 
-            {/* Dropdown for selecting limit */}
-            <select
-              value={limit}
-              onChange={(e) => {
-                setLimit(Number(e.target.value));
-                setPage(1); // reset to page 1 when limit changes
-              }}
-              className="px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-purple-400 text-gray-700"
-            >
-              <option value={10}>10 per page</option>
-              <option value={20}>20 per page</option>
-              <option value={50}>50 per page</option>
-              <option value={100}>100 per page</option>
-            </select>
+          <span className="text-gray-700 font-medium">Page {page}</span>
 
-            <span className="text-gray-700 font-medium">Page {page}</span>
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={images.length < limit}
+            className="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white shadow-lg disabled:bg-gray-300 transition"
+          >
+            Next
+          </button>
+        </motion.div>
 
-            <button
-              onClick={() => setPage((p) => p + 1)}
-              disabled={images.length < limit}
-              className="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white shadow-lg disabled:bg-gray-300 transition"
-            >
-              Next
-            </button>
-          </motion.div>
-
-          {/* Enlarged View */}
-          {selectedIndex !== null && (
-            <EnlargedView
-              images={images}
-              startIndex={selectedIndex}
-              onClose={() => setSelectedIndex(null)}
-            />
-          )}
-        </>
-      )}
+        {/* Enlarged View */}
+        {selectedIndex !== null && (
+          <EnlargedView
+            images={images}
+            startIndex={selectedIndex}
+            onClose={() => setSelectedIndex(null)}
+          />
+        )}
+      </>
     </div>
   );
 }
