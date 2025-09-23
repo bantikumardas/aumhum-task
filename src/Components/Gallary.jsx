@@ -103,7 +103,6 @@ function Gallary() {
               images={images}
               startIndex={selectedIndex}
               onClose={() => setSelectedIndex(null)}
-              setSelectedIndex={setSelectedIndex}
             />
           )}
         </>

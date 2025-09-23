@@ -1,19 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export default function EnlargedView({
-  images,
-  startIndex,
-  onClose,
-  setSelectedIndex,
-}) {
+export default function EnlargedView({ images, startIndex, onClose }) {
   const [index, setIndex] = useState(startIndex);
-  const [zoom, setZoom] = useState({ active: false, x: 50, y: 50, scale: 2 });
+  const [zoom, setZoom] = useState({ active: false, x: 50, y: 50, scale: 1 });
   const [zindex, setZindex] = useState(0);
   const imageRef = useRef(null);
   const activeThumbRef = useRef(null);
-
-  // Update index when startIndex changes (sync)
-  useEffect(() => setIndex(startIndex), [startIndex]);
 
   const prev = () => setIndex((i) => (i > 0 ? i - 1 : i));
   const next = () => setIndex((i) => (i < images.length - 1 ? i + 1 : i));
@@ -26,13 +18,11 @@ export default function EnlargedView({
       if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", handler);
+    // Cleanup function runs when component unmounts
     return () => {
       window.removeEventListener("keydown", handler);
     };
   }, []);
-
-  // Update parent selected index (sync)
-  useEffect(() => setSelectedIndex(index), [index]);
 
   const handleZoomClick = (e) => {
     const rect = imageRef.current.getBoundingClientRect();
