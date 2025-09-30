@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import "./EnlargedView.css";
 
 export default function EnlargedView({ images, startIndex, onClose }) {
   const [index, setIndex] = useState(startIndex);
-  const [zoom, setZoom] = useState({ active: false, x: 50, y: 50, scale: 1 });
+  const [zoom, setZoom] = useState({ active: false, x: 50, y: 50, scale: 2 });
   const [zindex, setZindex] = useState(0);
   const imageRef = useRef(null);
   const activeThumbRef = useRef(null);
@@ -58,30 +59,24 @@ export default function EnlargedView({ images, startIndex, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
+      className="enlarged-overlay"
       onMouseDown={(e) => {
-        if (e.target.classList.contains("fixed")) onClose();
+        if (e.target.classList.contains("enlarged-overlay")) onClose();
       }}
     >
-      <div className="bg-white rounded-lg shadow-xl relative w-full max-w-5xl">
+      <div className="enlarged-modal">
         {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute right-2 top-2 z-50 bg-white rounded-full shadow p-2 text-gray-600 hover:bg-gray-100"
-        >
+        <button onClick={onClose} className="close-btn">
           ✕
         </button>
 
         {/* Image container */}
-        <div
-          className="flex justify-center items-center h-[70vh] bg-black relative cursor-zoom-in"
-          onClick={handleZoomClick}
-        >
+        <div className="image-container" onClick={handleZoomClick}>
           <img
             ref={imageRef}
             src={current.large}
             alt={current.author}
-            className={`z-${zindex} max-h-full max-w-full transition-transform duration-200`}
+            className="enlarged-image"
             style={
               zoom.active
                 ? {
@@ -100,7 +95,7 @@ export default function EnlargedView({ images, startIndex, onClose }) {
                 e.stopPropagation();
                 prev();
               }}
-              className="z-10 absolute left-2 top-1/2 -translate-y-1/2 text-white p-2 rounded-full bg-black/40 hover:bg-black/60"
+              className="nav-btn left-btn"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +121,7 @@ export default function EnlargedView({ images, startIndex, onClose }) {
                 e.stopPropagation();
                 next();
               }}
-              className="z-10 absolute right-2 top-1/2 -translate-y-1/2 text-white p-2 rounded-full bg-black/40 hover:bg-black/60"
+              className="nav-btn right-btn"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,10 +142,10 @@ export default function EnlargedView({ images, startIndex, onClose }) {
         </div>
 
         {/* Author info and navigation */}
-        <div className="flex justify-center p-2">Author: {current.author}</div>
+        <div className="author">Author: {current.author}</div>
 
         {/* Filmstrip */}
-        <div className="flex overflow-x-auto mt-6 gap-2 px-4 max-w-[90vw]">
+        <div className="thumbnail-strip">
           {images.map((img, idx) => (
             <img
               key={img.id}
@@ -158,11 +153,7 @@ export default function EnlargedView({ images, startIndex, onClose }) {
               src={img.thumb}
               alt={img.author}
               onClick={() => setIndex(idx)}
-              className={`h-20 cursor-pointer rounded border-2 ${
-                idx === index
-                  ? "border-blue-500"
-                  : "border-transparent opacity-70 hover:opacity-100"
-              }`}
+              className={`thumbnail ${idx === index ? "active" : ""}`}
             />
           ))}
         </div>
