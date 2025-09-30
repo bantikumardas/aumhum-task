@@ -44,6 +44,10 @@ function App() {
 
   // Save handler
   const handleSave = () => {
+    if (formData === null) {
+      toast.error("All fields are required.");
+      return;
+    }
     if (
       !formData.name.trim() ||
       !formData.email.trim() ||

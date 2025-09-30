@@ -1,0 +1,6 @@
+.gallery-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #eff6ff, #f5f3ff, #fdf2f8);
+}
