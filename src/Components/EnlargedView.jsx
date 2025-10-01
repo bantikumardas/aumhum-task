@@ -88,6 +88,14 @@ export default function EnlargedView({ images, startIndex, onClose }) {
             }
           />
 
+          <div className="author-text">
+            <span>Author: {current.author}</span>
+            <div> </div>
+            <span>
+              Image Resolution : {current.width} ✕ {current.height}
+            </span>
+          </div>
+
           {/* Previous Overlay Button */}
           {index > 0 && (
             <button

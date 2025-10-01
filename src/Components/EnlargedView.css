@@ -38,6 +38,30 @@
   background: #6b6b6b;
   scale: 1.2;
 }
+
+.author-text {
+  color: white;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+  top: 0px;
+  opacity: 0;
+}
+/* .author-text:hover {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+} */
+
+.image-container:hover {
+  .author-text {
+    opacity: 1;
+    transition: 0.7 0.3s ease;
+  }
+}
 .thumbnail:hover {
   scale: 1.2;
   transition: transform 0.2s ease;
