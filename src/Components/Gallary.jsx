@@ -22,6 +22,8 @@ function Gallary() {
           author: img.author,
           thumb: `https://picsum.photos/id/${img.id}/400/300`,
           large: `https://picsum.photos/id/${img.id}/1200/800`,
+          width: img.width,
+          height: img.height,
         }));
 
         setImages((images) => {
