@@ -1,5 +1,5 @@
 import React, { useState } from "react"; 
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { HashRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Gallary from "./Components/Gallary";
 import Home from "./Home";
 import BasicForm from "./Components/BasicForm";
