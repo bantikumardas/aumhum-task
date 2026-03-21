@@ -35,6 +35,12 @@ export default function Home() {
         >
           Basic Form (Task 2)
         </button>
+        <button
+          className="px-6 py-3 text-lg rounded-2xl shadow-lg bg-pink-500 hover:bg-pink-600 text-white transition"
+          onClick={() => navigate("/splitwise")}
+        >
+          Split Wise
+        </button>
       </motion.div>
     </div>
   );

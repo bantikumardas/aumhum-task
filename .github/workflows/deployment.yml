@@ -1,0 +1,39 @@
+name: Deploy React to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 - Checkout code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Step 2 - Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Step 3 - Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4 - Build
+      - name: Build
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}  # your EC2 backend URL
+
+      # Step 5 - Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist    # Vite builds to dist not build
